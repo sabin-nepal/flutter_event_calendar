@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: _events.length,
         itemBuilder: (context,i){
           var event = _events[i];
-          var _dateTime = DateFormat('MMMM d, yyyy - h:mm a').format(event.dateTime);
+          var _dateTime = DateFormat('MMMM d, yyyy - hh:mm a').format(event.dateTime);
           return ListTile(
             title: Text(_dateTime),
             trailing: Icon(Icons.chevron_right,color: Colors.black,),
