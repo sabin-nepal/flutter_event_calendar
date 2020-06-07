@@ -18,7 +18,6 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
   @override
   void initState(){
     super.initState();
-    //initialize controller 
     showData();
     _controller = CalendarController();
   }
@@ -29,13 +28,9 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
   }
   void  showData ()async{
     var getEvents = await databaseReference.collection('events').getDocuments();
-
-   // print(getEvents.documents);
-
     getEvents.documents.forEach((e){
       var dateTime = e.data['date'].toDate();
       var _event = Event(title:e.data['title'],dateTime:dateTime);
-      //print(dateTime.runtimeType);
       if(_events[dateTime]==null){
         _events[dateTime] = [_event];
       }
@@ -44,6 +39,12 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
       }
      // _events = 
     });
+    _selectedEvents = _events[DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    )];
+    setState(() {});
   }
 
   void _onDaySelected(DateTime day, List events) {
@@ -57,6 +58,12 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.clear),
+          tooltip: "Back",
+          color: Colors.black,
+          onPressed:() => Navigator.pop(context),
+          ),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -64,7 +71,6 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             _buildTableCalendar(),
-            //const SizedBox(height: 8.0),
             Divider(),
           Expanded(child: _buildEventList()),
         ],)
@@ -74,7 +80,6 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
 
   
   // Simple TableCalendar configuration (using Styles)
-
   Widget _buildTableCalendar() {
     return TableCalendar(
       initialCalendarFormat: CalendarFormat.twoWeeks,
@@ -92,11 +97,8 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
               margin: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
               color: Color(0xFF5F52BC),
-              // borderRadius: BorderRadius.circular(10.0)),
               shape: BoxShape.circle
             ),
-              //padding: const EdgeInsets.only(top: 12.0, left: 12.0),
-              // color: Colors.deepOrange[300],
               child: Text(
                 '${date.day}',
                 style: TextStyle().copyWith(fontSize: 16.0),
@@ -111,11 +113,9 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
               margin: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
               color: hasData? Color(0xff50BE91) : Color(0xFFE1E1E1),
-              // borderRadius: BorderRadius.circular(10.0)),
               shape: BoxShape.circle
             ),
-              //padding: const EdgeInsets.only(top: 12.0, left: 12.0),
-              // color: Colors.deepOrange[300],
+        
               child: Text(
                 '${date.day}',
                 style: TextStyle().copyWith(fontSize: 16.0),
@@ -142,8 +142,6 @@ class _DisplayCalendarState extends State<DisplayCalendar>{
               ),
                 shape: BoxShape.circle
               ),
-                //padding: const EdgeInsets.only(top: 12.0, left: 12.0),
-                // color: Colors.deepOrange[300],
                 child: Text(
                   '${date.day}',
                   style: TextStyle().copyWith(fontSize: 16.0),
